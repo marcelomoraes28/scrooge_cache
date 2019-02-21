@@ -2,26 +2,26 @@ from functools import wraps
 
 import pickle
 
-from scrooge.cache import RedisCache, MemcacheCache
+from scrooge.cache import RedisBackend, MemcacheBackend
 from .exception import ScroogeClientException
 
 
 class Client(object):
-    def __init__(self, cache_client):
-        self.cache_client = cache_client
+    def __init__(self, cache_backend):
+        self.cache_backend = cache_backend
 
     # The allowed types in callback function
     ALLOWED_TYPES = [dict, list, str, int, float, tuple]
 
     @property
-    def cache_client(self):
-        return self._cache_client
+    def cache_backend(self):
+        return self._cache_backend
 
-    @cache_client.setter
-    def cache_client(self, cache_client):
-        if not isinstance(cache_client, RedisCache) and not isinstance(cache_client, MemcacheCache):  # noqa
-            raise ScroogeClientException("cache_client must be RedisCache or MemcacheCache instance")  # noqa
-        self._cache_client = cache_client
+    @cache_backend.setter
+    def cache_backend(self, cache_backend):
+        if not isinstance(cache_backend, RedisBackend) and not isinstance(cache_backend, MemcacheBackend):  # noqa
+            raise ScroogeClientException("cache_backend must be RedisCache or MemcacheCache instance")  # noqa
+        self._cache_backend = cache_backend
 
     def _validate(self, data):
         """
@@ -42,19 +42,19 @@ class Client(object):
         :param expiration_time: integer (seconds)
         """
 
-        self.cache_client.register_namespace(namespace=namespace)
+        self.cache_backend.register_namespace(namespace=namespace)
 
         def func_wrapper(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
-                gen_key = self.cache_client.generate_key(namespace, *args)
-                get_result = self.cache_client.get(gen_key)
+                gen_key = self.cache_backend.generate_key(namespace, *args)
+                get_result = self.cache_backend.get(gen_key)
                 if get_result:
                     return pickle.loads(get_result)
                 result = func(*args, **kwargs)
                 if self._validate(result):
-                    self.cache_client.set(gen_key, pickle.dumps(result),
-                                          ex=expiration_time)
+                    self.cache_backend.set(key=gen_key, value=pickle.dumps(result),
+                                           expiration_time=expiration_time)
                     return result
                 raise ScroogeClientException(
                     f"The return of {func.__qualname__} can not be object")

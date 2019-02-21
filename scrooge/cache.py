@@ -1,13 +1,12 @@
 import pickle
-
 import redis
-from pymemcache.client import base as memcache
 
+from pymemcache.client import base as memcache
 from .exception import ScroogeException
 
 
 class BaseCache(object):
-    cache_driver = None
+    cache_backend = None
 
     def __init__(self, host, port):
         self.host = host
@@ -46,30 +45,53 @@ class BaseCache(object):
         if namespaces:
             namespaces = pickle.loads(namespaces)
             if namespace in namespaces:
-                raise ScroogeException(f"Mr. Scrooge got you!! The namespace {namespace} already exist")  # noqa
+                raise ScroogeException(f"Scrooge Mcduck got you!! The namespace {namespace} already exist")  # noqa
             namespaces.append(namespace)
-            self.set('namespaces', pickle.dumps(namespaces))
+            self.set(key='namespaces', value=pickle.dumps(namespaces))
         else:
-            self.set('namespaces', pickle.dumps([namespace]))
+            self.set(key='namespaces', value=pickle.dumps([namespace]))
 
     @staticmethod
     def generate_key(*args):
         return "-".join(map(str, args))
 
 
-class RedisCache(BaseCache):
-    cache_driver = redis
+class RedisBackend(BaseCache):
+    cache_backend = redis
 
     def __init__(self, db=0, **kwargs):
         super().__init__(**kwargs)
-        self._con = self.cache_driver.Redis(host=self.host, port=self.port,
-                                            db=db)
+        self._con = self.cache_backend.Redis(host=self.host, port=self.port,
+                                             db=db)
         self.clear_namespaces()
 
+    def set(self, **kwargs):
+        """
+        Overwrite set method to translate expiration_time to redis pattern
+        """
+        if 'expiration_time' in kwargs and kwargs['expiration_time'] is not None:  # noqa
+            expiration_time = kwargs['expiration_time']
+            del kwargs['expiration_time']
+            super().set(ex=expiration_time, **kwargs)
+        else:
+            super().set(**kwargs)
 
-class MemcacheCache(BaseCache):
-    cache_driver = memcache
+
+class MemcacheBackend(BaseCache):
+    cache_backend = memcache
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._con = self.cache_driver.Client((self.host, self.port))
+        self._con = self.cache_backend.Client((self.host, self.port))
+        self.clear_namespaces()
+
+    def set(self, **kwargs):
+        """
+        Overwrite set method to translate expiration_time to memcache pattern
+        """
+        if 'expiration_time' in kwargs and kwargs['expiration_time'] is not None:  # noqa
+            expiration_time = kwargs['expiration_time']
+            del kwargs['expiration_time']
+            super().set(expire=expiration_time, **kwargs)
+        else:
+            super().set(**kwargs)

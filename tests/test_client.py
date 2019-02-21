@@ -1,7 +1,7 @@
 import pytest
 
-from scrooge.cache import MemcacheBackend, RedisBackend
-from scrooge.client import Client
+from scrooge import MemcacheBackend, RedisBackend
+from scrooge import Client
 from scrooge.exception import ScroogeClientException
 from tests.conftest import Test
 

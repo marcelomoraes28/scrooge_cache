@@ -1,49 +1,88 @@
 import time
 
 from scrooge.client import Client
-from scrooge.cache import RedisCache
+from scrooge.cache import RedisBackend, MemcacheBackend
 
-redis_client = RedisCache(host='127.0.0.1', port=6379)
+redis_backend = RedisBackend(host='127.0.0.1', port=6379)
+memcache_backend = MemcacheBackend(host='127.0.0.1', port=11211)
 
-client = Client(cache_client=redis_client)
+redis_client = Client(cache_backend=redis_backend)
+memcache_client = Client(cache_backend=memcache_backend)
 
 
 class Test:
     pass
 
 
-@client.gentlemen_cache(namespace='delay_5', expiration_time=2)
-def dict_delay(delay_time=5, delay_time_=2):
+@redis_client.gentlemen_cache(namespace='dict_delay', expiration_time=2)
+def r_dict_delay(delay_time=5, delay_time_=2):
     time.sleep(delay_time + delay_time_)
     print("Delay finished")
     return {delay_time: delay_time_}
 
 
-@client.gentlemen_cache(namespace='obj_delay', expiration_time=2)
-def obj_delay(delay_time=5):
+@redis_client.gentlemen_cache(namespace='obj_delay', expiration_time=2)
+def r_obj_delay(delay_time=5):
     return Test()
 
 
-@client.gentlemen_cache(namespace='str_delay', expiration_time=2)
-def str_delay(delay_time=1):
+@redis_client.gentlemen_cache(namespace='str_delay', expiration_time=2)
+def r_str_delay(delay_time=1):
     return 'foo-bar'
 
 
-@client.gentlemen_cache(namespace='int_delay', expiration_time=2)
-def int_delay(delay_time=2):
+@redis_client.gentlemen_cache(namespace='int_delay', expiration_time=2)
+def r_int_delay(delay_time=2):
     return 9
 
 
-@client.gentlemen_cache(namespace='float_delay', expiration_time=2)
-def float_delay(delay_time=3):
+@redis_client.gentlemen_cache(namespace='float_delay', expiration_time=2)
+def r_float_delay(delay_time=3):
     return 1.4
 
 
-@client.gentlemen_cache(namespace='list_delay', expiration_time=2)
-def list_delay(delay_time=4):
+@redis_client.gentlemen_cache(namespace='list_delay', expiration_time=2)
+def r_list_delay(delay_time=4):
     return ['foo', 'bar']
 
 
-@client.gentlemen_cache(namespace='tuple_delay', expiration_time=2)
-def tuple_delay(delay_time=5):
+@redis_client.gentlemen_cache(namespace='tuple_delay', expiration_time=2)
+def r_tuple_delay(delay_time=5):
+    return (1, 2)
+
+
+@memcache_client.gentlemen_cache(namespace='dict_delay', expiration_time=2)
+def m_dict_delay(delay_time=5, delay_time_=2):
+    time.sleep(delay_time + delay_time_)
+    print("Delay finished")
+    return {delay_time: delay_time_}
+
+
+@memcache_client.gentlemen_cache(namespace='obj_delay', expiration_time=2)
+def m_obj_delay(delay_time=5):
+    return Test()
+
+
+@memcache_client.gentlemen_cache(namespace='str_delay', expiration_time=2)
+def m_str_delay(delay_time=1):
+    return 'foo-bar'
+
+
+@memcache_client.gentlemen_cache(namespace='int_delay', expiration_time=2)
+def m_int_delay(delay_time=2):
+    return 9
+
+
+@memcache_client.gentlemen_cache(namespace='float_delay', expiration_time=2)
+def m_float_delay(delay_time=3):
+    return 1.4
+
+
+@memcache_client.gentlemen_cache(namespace='list_delay', expiration_time=2)
+def m_list_delay(delay_time=4):
+    return ['foo', 'bar']
+
+
+@memcache_client.gentlemen_cache(namespace='tuple_delay', expiration_time=2)
+def m_tuple_delay(delay_time=5):
     return (1, 2)

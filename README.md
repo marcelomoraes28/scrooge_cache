@@ -26,7 +26,7 @@ Scrooge is able to cache function returns for a given or infinite period.
 
 **Rules:**
 - Just a unique namespace per backend instance;
-- If you do not set expiration_time scrooge it'll take infinite time;
+- If you do not set expiration_time scrooge will take infinite time;
 - The return of decorated function must be str or int or float or tuple, or list or dict;
 - If you use redis backend you can defined the db index using the parameter **db=index**, if you do not do this the default will be 0;
 

@@ -11,7 +11,7 @@ Scrooge Cache
 
 What is Scrooge?
 ----------------------------------
-Scrooge is smart cache storage for stronger gentlemen
+
 Scrooge is a **S**mart **C**ache Sto**r**age f**o**r str**o**nger **g**entlem**e**n
 
 **Backend supports:**

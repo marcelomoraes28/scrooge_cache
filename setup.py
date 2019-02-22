@@ -10,7 +10,7 @@ extras_require = {
     'test': [
         'pytest==4.2.1',
         'pytest-mock==1.10.1',
-        'pytest-cov==2.6.1',
+        'pytest-cov==2.5.1',
     ],
     'ci': [
         'python-coveralls==2.9.1',

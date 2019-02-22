@@ -6,6 +6,7 @@ Scrooge Cache
 [![Coverage Status](https://coveralls.io/repos/github/marcelomoraes28/scrooge_cache/badge.svg?branch=master)](https://coveralls.io/github/marcelomoraes28/scrooge_cache?branch=master)
 [![Pypi Version](https://img.shields.io/badge/pypi-0.0.1-yellow.svg)](https://img.shields.io/badge/pypi-0.0.1--alpha-yellow.svg)
 [![Python Version](https://img.shields.io/badge/python-3.6%7C3.7-blue.svg)](https://img.shields.io/badge/python-3.6%7C3.7-blue.svg)
+
 ![alt text](scrooge_mcduck.png)
 
 What is Scrooge?

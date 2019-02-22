@@ -1,0 +1,22 @@
+language: python
+services:
+  - memcached
+  - redis-server
+python:
+  - '3.6'
+install:
+  - pip install -e .[test,ci]
+script:
+  - pytest --cov=scrooge --cov-report annotate
+deploy:
+  skip_cleanup: true
+  provider: pypi
+  user: marcelomoraes28
+  on:
+    tags: true
+    branch: master
+    python: '3.6'
+  password:
+    secure: HXMeE7brPI2vu4L2Z9O+zaqBHC2YB74aWBv+TlvxFS6rW79ESuoA1e1s/zyzZy7oKSFujPom0wOAMmFWnlgwI4PXE0sh4jYBhJSYRZY9C2XhJb6Y3aVywNsJfGZf/GQKvpZ1mwlZ35+dQKqtjQkYm4rjt5w5E34oJI7Nhrwco2ZO6n7eeWERkhX7/hOrPWWEceMVii8KCUZRoryfyrHYU0kNRVrMmT/XME8pWC+SB3eA8Ws0Ac7Jfx2obnQ89xeGsWyWwuwrBV4MdV18DQHndYhTBmus+KJTgkhM9u9NltJ5O9/8THZDUSb3s5WI5MlDb71qCPtNPDA8CifrLJVwRNgT9ew2z4woU4QwmtdUk5gf+yYdvMaSdCDB3oMJ3gEoRShDsqyO10PBP7CWTMBKq2FfNdE6u6SkBzP14tRwYRGQW32rimLw60w02LPEhzvI3Fk3LcXewQhs28m1toYVZX3aazNNXduPH7dARo6cMKhorPwnEQI5zrpX0gyWwQLplQselHF8k1rnx0vS9sWN9R1QdcTH0nxggRc4IgxyuUTNJs79gjm1EFqF0w3qyAJkBaAu86O//ShnfhRcg3QnFcKaFtNH5OCMFWN/K7jRoG3AXgP3cyAqU8+6FXYxE3m5B8hLxKxmzByIfgvxbmDcKGLxHIbKPnpS4d35Gcpedxs=
+after_success:
+- coveralls

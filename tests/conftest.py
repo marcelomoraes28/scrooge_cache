@@ -3,8 +3,8 @@ import time
 from scrooge import Client
 from scrooge import RedisBackend, MemcacheBackend
 
-redis_backend = RedisBackend(host='127.0.0.1', port=6379)
-memcache_backend = MemcacheBackend(host='127.0.0.1', port=11211)
+redis_backend = RedisBackend(host='localhost', port=6379)
+memcache_backend = MemcacheBackend(host='localhost', port=11211)
 
 redis_client = Client(cache_backend=redis_backend)
 memcache_client = Client(cache_backend=memcache_backend)

@@ -22,12 +22,12 @@ with open('README.md') as f:
 
 setup(
     name='scrooge_cache',
-    version='0.0.1',
+    version='0.1.0',
     description='Scrooge Cache',
     long_description=long_description,
     long_description_content_type='text/markdown',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Programming Language :: Python',
         'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',

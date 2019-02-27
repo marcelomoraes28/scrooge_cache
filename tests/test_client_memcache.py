@@ -3,11 +3,11 @@ import time
 import datetime as dt
 
 from scrooge.exception import ScroogeClientException, ScroogeException
-from tests.conftest import m_dict_delay, m_str_delay, m_list_delay, \
+from tests.conftest import m_no_cache, m_dict_delay, m_str_delay, m_list_delay, \
     m_float_delay, m_tuple_delay, m_obj_delay, m_int_delay, memcache_client
 
 
-class TestClientWithRedis:
+class TestClientWithMemcache:
 
     def test_same_namespace(self):
         @memcache_client.gentlemen_cache(namespace='name', expiration_time=2)
@@ -15,7 +15,8 @@ class TestClientWithRedis:
             return 'foo-bar'
 
         with pytest.raises(ScroogeException):
-            @memcache_client.gentlemen_cache(namespace='name', expiration_time=2)
+            @memcache_client.gentlemen_cache(namespace='name',
+                                             expiration_time=2)
             def name_(delay_time=1):
                 return 'foo-bar'
 
@@ -61,3 +62,15 @@ class TestClientWithRedis:
     def test_client_response_if_is_tuple(self):
         d1 = m_tuple_delay(5)
         assert d1 == (1, 2)
+
+    def test_client_no_cache(self):
+        start = dt.datetime.utcnow()
+        no_cache = m_no_cache()
+        end = dt.datetime.utcnow()
+        assert (end - start).total_seconds() > 2
+        assert no_cache == "Scrooge got you!!"
+        start = dt.datetime.utcnow()
+        m_no_cache(no_cache=True)
+        end = dt.datetime.utcnow()
+        assert (end - start).total_seconds() > 2
+        assert no_cache == "Scrooge got you!!"

@@ -14,6 +14,12 @@ class Test:
     pass
 
 
+@redis_client.gentlemen_cache(namespace='no_cache', expiration_time=10)
+def r_no_cache(**kwargs):
+    time.sleep(2)
+    return "Scrooge got you!!"
+
+
 @redis_client.gentlemen_cache(namespace='dict_delay', expiration_time=2)
 def r_dict_delay(delay_time=5, delay_time_=2):
     time.sleep(delay_time + delay_time_)
@@ -86,3 +92,9 @@ def m_list_delay(delay_time=4):
 @memcache_client.gentlemen_cache(namespace='tuple_delay', expiration_time=2)
 def m_tuple_delay(delay_time=5):
     return (1, 2)
+
+
+@memcache_client.gentlemen_cache(namespace='no_cache', expiration_time=10)
+def m_no_cache(**kwargs):
+    time.sleep(2)
+    return "Scrooge got you!!"

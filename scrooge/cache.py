@@ -69,12 +69,14 @@ class RedisBackend(BaseCache):
         """
         Overwrite set method to translate expiration_time to redis pattern
         """
-        if 'expiration_time' in kwargs and kwargs['expiration_time'] is not None:  # noqa
-            expiration_time = kwargs['expiration_time']
-            del kwargs['expiration_time']
-            super().set(ex=expiration_time, **kwargs)
-        else:
-            super().set(**kwargs)
+        if not kwargs.get('no_cache', False):
+            kwargs.pop("no_cache", None)
+            if kwargs.get('expiration_time'):
+                expiration_time = kwargs['expiration_time']
+                del kwargs['expiration_time']
+                super().set(ex=expiration_time, **kwargs)
+            else:
+                super().set(**kwargs)
 
 
 class MemcacheBackend(BaseCache):
@@ -89,9 +91,11 @@ class MemcacheBackend(BaseCache):
         """
         Overwrite set method to translate expiration_time to memcache pattern
         """
-        if 'expiration_time' in kwargs and kwargs['expiration_time'] is not None:  # noqa
-            expiration_time = kwargs['expiration_time']
-            del kwargs['expiration_time']
-            super().set(expire=expiration_time, **kwargs)
-        else:
-            super().set(**kwargs)
+        if not kwargs.get('no_cache', False):
+            kwargs.pop("no_cache", None)
+            if kwargs.get('expiration_time'):
+                expiration_time = kwargs['expiration_time']
+                del kwargs['expiration_time']
+                super().set(expire=expiration_time, **kwargs)
+            else:
+                super().set(**kwargs)

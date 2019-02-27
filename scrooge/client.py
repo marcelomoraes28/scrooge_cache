@@ -47,14 +47,20 @@ class Client(object):
         def func_wrapper(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
+                no_cache = kwargs.get('no_cache', False)
                 gen_key = self.cache_backend.generate_key(namespace, *args)
-                get_result = self.cache_backend.get(gen_key)
-                if get_result:
-                    return pickle.loads(get_result)
-                result = func(*args, **kwargs)
+                if no_cache:
+                    result = func(*args, **kwargs)
+                else:
+                    get_result = self.cache_backend.get(gen_key)
+                    if get_result:
+                        return pickle.loads(get_result)
+                    result = func(*args, **kwargs)
                 if self._validate(result):
-                    self.cache_backend.set(key=gen_key, value=pickle.dumps(result),
-                                           expiration_time=expiration_time)
+                    self.cache_backend.set(key=gen_key,
+                                           value=pickle.dumps(result),
+                                           expiration_time=expiration_time,
+                                           no_cache=no_cache)
                     return result
                 raise ScroogeClientException(
                     f"The return of {func.__qualname__} can not be object")

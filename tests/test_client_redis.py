@@ -73,3 +73,20 @@ class TestClientWithRedis:
         end = dt.datetime.utcnow()
         assert (end - start).total_seconds() > 2
         assert no_cache == "Scrooge got you!!"
+
+    def test_force_cache_update(self):
+        start = dt.datetime.utcnow()
+        cache = r_no_cache()
+        end = dt.datetime.utcnow()
+        assert (end - start).total_seconds() > 2
+        assert cache == "Scrooge got you!!"
+        start = dt.datetime.utcnow()
+        cache = r_no_cache()
+        end = dt.datetime.utcnow()
+        assert (end - start).total_seconds() < 1
+        assert cache == "Scrooge got you!!"
+        start = dt.datetime.utcnow()
+        cache = r_no_cache(force_cache_update=True)
+        end = dt.datetime.utcnow()
+        assert (end - start).total_seconds() > 2
+        assert cache == "Scrooge got you!!"

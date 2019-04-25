@@ -165,6 +165,31 @@ print(function_to_be_cached(4,5))
 print(function_to_be_cached(4,5, no_cache=True))
 ```
 
+**Force cache update**
+
+If you wanna force the cache update, you can do this using the `force_cache_update` argument
+
+```python
+import time
+from scrooge import MemcacheBackend, Client
+
+backend = MemcacheBackend(host='127.0.0.1', port=11211)
+client = Client(cache_backend=backend)
+
+# Cached for 10 seconds
+@client.gentlemen_cache(namespace='f1', expiration_time=10)
+def function_to_be_cached(p1, p2):
+    time.sleep(5)
+    return {"p1": p1, "p2": p2}
+
+# After 5 seconds the return will be {"p1": 4, "p2": 5}
+print(function_to_be_cached(4,5))
+
+# Force cache update
+# After 5 seconds the return will be {"p1": 4, "p2": 5}
+print(function_to_be_cached(4,5, force_cache_update=True))
+```
+
 Run tests
 ------------
 ```

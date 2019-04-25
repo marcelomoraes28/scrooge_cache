@@ -4,7 +4,8 @@ import datetime as dt
 
 from scrooge.exception import ScroogeClientException, ScroogeException
 from tests.conftest import r_no_cache, r_dict_delay, r_str_delay, r_list_delay, \
-    r_float_delay, r_tuple_delay, r_obj_delay, r_int_delay, redis_client
+    r_float_delay, r_tuple_delay, r_obj_delay, r_int_delay, redis_client, \
+    force_cache_update
 
 
 class TestClientWithRedis:
@@ -76,17 +77,17 @@ class TestClientWithRedis:
 
     def test_force_cache_update(self):
         start = dt.datetime.utcnow()
-        cache = r_no_cache()
+        cache = force_cache_update()
         end = dt.datetime.utcnow()
         assert (end - start).total_seconds() > 2
         assert cache == "Scrooge got you!!"
         start = dt.datetime.utcnow()
-        cache = r_no_cache()
+        cache = force_cache_update()
         end = dt.datetime.utcnow()
         assert (end - start).total_seconds() < 1
         assert cache == "Scrooge got you!!"
         start = dt.datetime.utcnow()
-        cache = r_no_cache(force_cache_update=True)
+        cache = force_cache_update(force_cache_update=True)
         end = dt.datetime.utcnow()
         assert (end - start).total_seconds() > 2
         assert cache == "Scrooge got you!!"

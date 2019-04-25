@@ -20,6 +20,12 @@ def r_no_cache(**kwargs):
     return "Scrooge got you!!"
 
 
+@redis_client.gentlemen_cache(namespace='force_cache_update', expiration_time=10)
+def force_cache_update(**kwargs):
+    time.sleep(2)
+    return "Scrooge got you!!"
+
+
 @redis_client.gentlemen_cache(namespace='dict_delay', expiration_time=2)
 def r_dict_delay(delay_time=5, delay_time_=2):
     time.sleep(delay_time + delay_time_)

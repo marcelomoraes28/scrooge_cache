@@ -11,12 +11,12 @@ from tests.conftest import r_no_cache, r_dict_delay, r_str_delay, r_list_delay, 
 class TestClientWithRedis:
 
     def test_same_namespace(self):
-        @redis_client.gentlemen_cache(namespace='name', expiration_time=2)
+        @redis_client.gentlemen_cache(namespace='name_1', expiration_time=2)
         def name(delay_time=1):
             return 'foo-bar'
 
         with pytest.raises(ScroogeException):
-            @redis_client.gentlemen_cache(namespace='name', expiration_time=2)
+            @redis_client.gentlemen_cache(namespace='name_1', expiration_time=2)
             def name_(delay_time=1):
                 return 'foo-bar'
 

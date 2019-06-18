@@ -22,7 +22,7 @@ with open('README.md') as f:
 
 setup(
     name='scrooge_cache',
-    version='0.1.1',
+    version='0.1.2',
     description='Scrooge Cache',
     long_description=long_description,
     long_description_content_type='text/markdown',

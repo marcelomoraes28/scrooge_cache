@@ -1,8 +1,9 @@
-import pickle
 import redis
 
 from pymemcache.client import base as memcache
 from .exception import ScroogeException
+
+NAMESPACES = []
 
 
 class BaseCache(object):
@@ -38,18 +39,13 @@ class BaseCache(object):
         self._con.set(key, value, **kwargs)
 
     def clear_namespaces(self):
-        self._con.delete('namespaces')
+        NAMESPACES = []
 
     def register_namespace(self, namespace):
-        namespaces = self.get('namespaces')
-        if namespaces:
-            namespaces = pickle.loads(namespaces)
-            if namespace in namespaces:
-                raise ScroogeException(f"Scrooge Mcduck got you!! The namespace {namespace} already exist")  # noqa
-            namespaces.append(namespace)
-            self.set(key='namespaces', value=pickle.dumps(namespaces))
-        else:
-            self.set(key='namespaces', value=pickle.dumps([namespace]))
+
+        if namespace in NAMESPACES:
+            raise ScroogeException(f"Scrooge Mcduck got you!! The namespace {namespace} already exist")  # noqa
+        NAMESPACES.append(namespace)
 
     @staticmethod
     def generate_key(*args):

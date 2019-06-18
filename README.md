@@ -4,7 +4,7 @@ Scrooge Cache
 
 [![Build Status](https://travis-ci.org/marcelomoraes28/scrooge_cache.svg?branch=master)](https://travis-ci.org/marcelomoraes28/scrooge_cache)
 [![Coverage Status](https://coveralls.io/repos/github/marcelomoraes28/scrooge_cache/badge.svg?branch=master)](https://coveralls.io/github/marcelomoraes28/scrooge_cache?branch=master)
-[![Pypi Version](https://img.shields.io/badge/pypi-0.1.1-yellow.svg)](https://img.shields.io/badge/pypi-0.1.1--beta-yellow.svg)
+[![Pypi Version](https://img.shields.io/badge/pypi-0.1.2-yellow.svg)](https://img.shields.io/badge/pypi-0.1.2--beta-yellow.svg)
 [![Python Version](https://img.shields.io/badge/python-3.6%7C3.7-blue.svg)](https://img.shields.io/badge/python-3.6%7C3.7-blue.svg)
 
 ![alt text](https://github.com/marcelomoraes28/scrooge_cache/raw/master/scrooge_mcduck.png)

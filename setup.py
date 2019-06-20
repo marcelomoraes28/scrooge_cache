@@ -2,7 +2,7 @@ from setuptools import setup
 
 requires = [
     'pymemcache==2.1.1',
-    'redis==3.1.0',
+    'redis',
     'six==1.12.0'
 ]
 
@@ -22,7 +22,7 @@ with open('README.md') as f:
 
 setup(
     name='scrooge_cache',
-    version='0.1.2',
+    version='0.1.3',
     description='Scrooge Cache',
     long_description=long_description,
     long_description_content_type='text/markdown',
